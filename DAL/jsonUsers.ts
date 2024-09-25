@@ -1,24 +1,16 @@
 import jsonfile from 'jsonfile';
 import { User } from '../models/types';
 
+const DB_FILE_PATH = process.env.DB_FILE_PATH || './data/db.json';
 
-export const writeUserToJsonFile = async (user: User)=>{
 
-    jsonfile.readFile('./data/db.json')
-    .then(users => {
-        users.push(user);
-        jsonfile.writeFile('./data/db.json', users, function (err) {
-    if (err) console.error(err)
-  })
+export const writeUserToJsonFile = async (user: User): Promise<void> => {
+  const users: User[] = await jsonfile.readFile(DB_FILE_PATH);
+  users.push(user);
+  await jsonfile.writeFile(DB_FILE_PATH, users);
+};
 
-    })
-    .catch(error => console.error(error))
-}
-
-export const readFromJsonFile = async()=>{
-
-    
-    const users = await jsonfile.readFile('./data/db.json');
-    return users;
-}
-
+export const readFromJsonFile = async (): Promise<User[]> => {
+  const users: User[] = await jsonfile.readFile(DB_FILE_PATH);
+  return users;
+};

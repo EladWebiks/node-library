@@ -8,18 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import jsonfile from 'jsonfile';
+const DB_FILE_PATH = process.env.DB_FILE_PATH || './data/db.json';
 export const writeUserToJsonFile = (user) => __awaiter(void 0, void 0, void 0, function* () {
-    jsonfile.readFile('./data/db.json')
-        .then(users => {
-        users.push(user);
-        jsonfile.writeFile('./data/db.json', users, function (err) {
-            if (err)
-                console.error(err);
-        });
-    })
-        .catch(error => console.error(error));
+    const users = yield jsonfile.readFile(DB_FILE_PATH);
+    users.push(user);
+    yield jsonfile.writeFile(DB_FILE_PATH, users);
 });
 export const readFromJsonFile = () => __awaiter(void 0, void 0, void 0, function* () {
-    const users = yield jsonfile.readFile('./data/db.json');
+    const users = yield jsonfile.readFile(DB_FILE_PATH);
     return users;
 });
